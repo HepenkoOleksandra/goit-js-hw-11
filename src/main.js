@@ -1,7 +1,7 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-// import SimpleLightbox from "simplelightbox";
-// import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 // import css from "file.css";
 
 const refs = {
@@ -12,14 +12,18 @@ const refs = {
 
 refs.form.addEventListener('submit', onFormSubmit);
 
+let gallery = new SimpleLightbox('.gallery-link', {
+  captionsData: "alt",
+  captionDelay: 500
+});
+
+
 function onFormSubmit(e) {
-  
-    refs.galleryList.innerHTML = ''; // подумати
-       
     e.preventDefault();
  
     const query = e.target.elements.query.value.trim();
-    
+    isSameKey(query);
+   
 if (query === '') {
         alert('Please enter a category name'); // iziToast 
         return;
@@ -34,12 +38,32 @@ if (query === '') {
                 position: 'topRight',
             });
         } else {
+            
             renderGallery(data);
+            
         }
         
     });
 
     e.target.reset();
+}
+
+// Перевірка на те, чи ключове слово є те саме
+function isSameKey(newKey) {
+  // Отримання попереднього ключового слова, яке було використане
+  const previousKey = sessionStorage.getItem('category');
+  
+  if (previousKey && previousKey === newKey) {
+    return true; // Ключове слово є те саме
+  } else {
+    // Очищення вмісту галереї
+    refs.galleryList.innerHTML = ''; 
+    
+    // Збереження нового ключового слова в sessionStorage
+    sessionStorage.setItem('category', newKey);
+    
+    return false; // Ключове слово є новим
+  }
 }
 
 function getGallery(category) {
@@ -80,10 +104,42 @@ function renderGallery(elements) {
         .join('\n');
        
     refs.galleryList.insertAdjacentHTML('beforeend', markup);
+    
+    gallery.refresh();   
 }
 
 
 
+
+
+
+
+// Зберігаємо всі додані картинки у масиві
+let addedImages = [];
+
+// Функція, яка перевіряє, чи була додана картинка раніше
+function isImageAdded(imageUrl) {
+  return addedImages.includes(imageUrl);
+}
+
+// Додаємо картинку до переднього плану
+function addImageToForeground(imageUrl) {
+  // Перевіряємо, чи картинка не була додана раніше
+  if (!isImageAdded(imageUrl)) {
+    addedImages.push(imageUrl);
+
+    // Ваш код для додавання картинки до переднього плану тут
+
+    console.log('Картинка була успішно додана!');
+  } else {
+    console.log('Ця картинка вже була додана!');
+  }
+}
+
+// Приклад використання
+addImageToForeground('http://example.com/image1.jpg'); // Додана нова картинка
+addImageToForeground('http://example.com/image2.jpg'); // Додана нова картинка
+addImageToForeground('http://example.com/image1.jpg'); // Картинка вже була додана
 
 
 
