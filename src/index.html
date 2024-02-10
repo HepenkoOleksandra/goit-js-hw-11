@@ -4,22 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <form class="get-category">
+    <form class="search-images">
       <input
         type="text"
-        class="query-category"
+        class="query-images"
         name="query"
-        placeholder="Enter category"
+        placeholder="Search images..."
       />
-      <button type="submit" class="btn-category">Btn</button>
+      <button type="submit" class="btn-search">Search</button>
     </form>
-    <!-- <span class="loader">Loading</span> -->
+    <span class="loader hidden">Load&nbsp;ng</span>
     <div class="container-gallery">
-      <ul class="gallery">
-        Gallery
-      </ul>
+      <ul class="gallery"></ul>
     </div>
     <script type="module" src="./main.js"></script>
   </body>

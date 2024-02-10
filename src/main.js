@@ -5,10 +5,13 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 // import css from "file.css";
 
 const refs = {
-    form: document.querySelector('.get-category'),
-    input: document.querySelector('.query-category'),
-    galleryList: document.querySelector('.gallery')
+    form: document.querySelector('.search-images'),
+    input: document.querySelector('.query-images'),
+  galleryList: document.querySelector('.gallery'),
+   loadElem: document.querySelector('.loader')
 }
+
+console.log(refs.form);
 
 refs.form.addEventListener('submit', onFormSubmit);
 
@@ -22,18 +25,22 @@ function onFormSubmit(e) {
     e.preventDefault();
  
     const query = e.target.elements.query.value.trim();
-    isSameKey(query);
+    // isSameKey(query);
    
 if (query === '') {
         alert('Please enter a category name'); // iziToast 
         return;
     }
 
+  
+  refs.loadElem.classList.remove('hidden');
+
+
     getGallery(query).then(data => { 
         if (data.hits.length === 0) {
             iziToast.show({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
-                messageColor: 'green',
+                // messageColor: 'green',
                 backgroundColor: '#e3f2ff',
                 position: 'topRight',
             });
@@ -43,6 +50,10 @@ if (query === '') {
             
         }
         
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      //looder
     });
 
     e.target.reset();
@@ -90,12 +101,24 @@ function galleryTemplate(element) {
         <a class="gallery-link" href="${largeImageURL}">
             <img class="gallery-image" src="${webformatURL}" alt="${tags}" />
         </a>
-        <div class="gallery-body">
-            <p class="gallery-info">Likes: ${likes}</p>
-            <p class="gallery-info">Views: ${views}</p>
-            <p class="gallery-info">Comments: ${comments}</p>
-            <p class="gallery-info">Downloads: ${downloads}</p>
-        </div>
+        <ul class="gallery-body">
+            <li class="gallery-info">
+            <h2>Likes:</h2>
+            <p>${likes}</p>
+             </li>
+            <li class="gallery-info">
+            <h2>Views:</h2>
+            <p>${views}</p>
+             </li>
+            <li class="gallery-info">
+            <h2>Comments:</h2>
+            <p>${comments}</p>
+             </li>
+            <li class="gallery-info">
+            <h2>Downloads:</h2>
+            <p>${downloads}</p>
+             </li>
+        </ul>
     </li>`
 }
 
